@@ -4,6 +4,7 @@ import Signin from "@/components/pages/auth/Signin"
 import App from "@/App"
 import Signup from "@/components/pages/auth/Signup"
 import MainLayout from "@/components/pages/MainLayout"
+import HomePage from "@/components/pages/Home"
 
 export const router = createBrowserRouter([
     {
@@ -12,6 +13,12 @@ export const router = createBrowserRouter([
             {
                 path: "/",
                 element: <MainLayout />,
+                children: [
+                    {
+                        index: true,
+                        element: <HomePage />,
+                    },
+                ],
             },
             {
                 path: "/auth",

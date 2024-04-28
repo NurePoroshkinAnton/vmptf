@@ -1,14 +1,12 @@
 import { Layout } from "antd"
-import { Outlet } from "react-router-dom"
 import Header from "./Header"
+import Content from "./Content"
 
 export default function MainLayout() {
     return (
-        <Layout>
+        <Layout style={{ height: "100%" }}>
             <Header />
-            <Layout.Content>
-                <Outlet />
-            </Layout.Content>
+            <Content />
         </Layout>
     )
 }

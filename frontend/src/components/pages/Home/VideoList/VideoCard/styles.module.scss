@@ -1,0 +1,28 @@
+.card-wrapper {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.stats {
+    font-size: 14px;
+    color: #c2c2c2;
+}
+
+.preview {
+    border-radius: 14px;
+    max-height: 300px;
+    object-fit: cover;
+    margin-bottom: 8px;
+}
+
