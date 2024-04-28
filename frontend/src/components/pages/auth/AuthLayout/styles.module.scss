@@ -1,0 +1,38 @@
+.auth-layout {
+    height: 100%;
+    padding: 50px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background-color: #c7d5f0;
+}
+
+.auth-banner-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-banner {
+    width: 100%;
+    object-fit: contain;
+}
+
+.content-wrapper {
+    max-width: 500px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-inline: auto;
+
+    :global {
+        .ant-typography {
+            color: #fff;
+        }
+
+        h1.ant-typography {
+            margin: 0;
+        }
+    }
+}
+

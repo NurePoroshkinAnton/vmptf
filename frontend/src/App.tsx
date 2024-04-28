@@ -1,10 +1,19 @@
-import { Typography, App as AntdApp } from "antd"
+import { App as AntdApp, ConfigProvider } from "antd"
+import { Outlet } from "react-router-dom"
 
 export default function App() {
     return (
-        <AntdApp>
-            <Typography.Title>UniTube</Typography.Title>
-        </AntdApp>
+        <ConfigProvider
+            theme={{
+                token: {
+                    colorPrimary: "#4d5075",
+                },
+            }}
+        >
+            <AntdApp style={{ height: "100%" }}>
+                <Outlet />
+            </AntdApp>
+        </ConfigProvider>
     )
 }
 
