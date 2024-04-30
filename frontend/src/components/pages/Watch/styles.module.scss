@@ -1,0 +1,30 @@
+.video-block {
+    flex-direction: column;
+    height: auto;
+}
+
+.video {
+    aspect-ratio: 1.77;
+    height: 680px;
+    border-radius: 14px;
+    background-color: #d5cece;
+    margin-bottom: 20px;
+}
+
+.title {
+    font-size: 36px;
+    font-weight: bold;
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.views-count {
+    font-size: 20px;
+    color: #c2c2c2;
+    margin-right: auto;
+}
+
