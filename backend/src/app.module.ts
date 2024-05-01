@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AuthModule } from './auth/auth.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { datasourceOptions } from './database/datasource-options';
 import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
+import { CdnModule } from './cdn/cdn.module';
+import { datasourceOptions } from './database/datasource-options';
+import { VideosModule } from './videos/videos.module';
 
 @Module({
   imports: [
@@ -13,6 +15,8 @@ import { JwtModule } from '@nestjs/jwt';
       autoLoadEntities: true,
     }),
     JwtModule.register({ global: true }),
+    VideosModule,
+    CdnModule,
   ],
 })
 export class AppModule {}
