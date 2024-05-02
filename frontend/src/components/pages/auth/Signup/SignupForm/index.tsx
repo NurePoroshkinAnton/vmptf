@@ -1,32 +1,38 @@
-import { Button, Col, Form, Input, Row } from "antd"
-import styles from "./styles.module.scss"
+import { authStore } from "@/store/auth"
+import { SignupDto } from "@/types/models/auth/dto/SignupDto"
+import { Button, Form, Input } from "antd"
+import { observer } from "mobx-react-lite"
 import { useNavigate } from "react-router-dom"
+import styles from "./styles.module.scss"
 
-export default function SignupForm() {
+function SignupFormComponent() {
     const navigate = useNavigate()
 
+    function handleSubmit(values: SignupDto) {
+        authStore.signup(values).then(() => navigate("/"))
+    }
+
     return (
-        <Form layout="vertical" className={styles["signup-form"]}>
-            <Row gutter={24}>
-                <Col span={12}>
-                    <Form.Item label="First name">
-                        <Input />
-                    </Form.Item>
-                </Col>
-                <Col span={12}>
-                    <Form.Item label="Last name">
-                        <Input />
-                    </Form.Item>
-                </Col>
-            </Row>
-            <Form.Item label="Email">
-                <Input type="password" />
+        <Form
+            layout="vertical"
+            className={styles["signup-form"]}
+            onFinish={handleSubmit}
+        >
+            <Form.Item label="Nickname" name="nickname">
+                <Input />
             </Form.Item>
-            <Form.Item label="Password">
+            <Form.Item label="Email" name="email">
+                <Input />
+            </Form.Item>
+            <Form.Item label="Password" name="password">
                 <Input.Password type="password" />
             </Form.Item>
             <Form.Item>
-                <Button type="primary" className={styles["submit-button"]}>
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    className={styles["submit-button"]}
+                >
                     Signup
                 </Button>
                 <Button
@@ -40,4 +46,7 @@ export default function SignupForm() {
         </Form>
     )
 }
+
+const SignupForm = observer(SignupFormComponent)
+export default SignupForm
 
