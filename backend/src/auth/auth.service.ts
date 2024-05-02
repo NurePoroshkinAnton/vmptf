@@ -7,6 +7,7 @@ import { configService } from 'src/utlis/ConfigService';
 import { SigninDto } from './dto/signin.dto';
 import * as bcrypt from 'bcrypt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { omit } from 'lodash';
 
 @Injectable()
 export class AuthService {
@@ -34,6 +35,11 @@ export class AuthService {
 
     const accessToken = this.signJwt(user);
     return { accessToken };
+  }
+
+  async getProfile(userId: string) {
+    const user = await this.userRepository.findOneBy({ id: userId });
+    return omit(user, 'password');
   }
 
   private signJwt(user: User) {

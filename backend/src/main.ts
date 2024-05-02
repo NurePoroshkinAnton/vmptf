@@ -9,7 +9,10 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
   app.use(cookieParser());
-  app.enableCors({ credentials: true, origin: 'http://localhost:5173' });
+  app.enableCors({
+    credentials: true,
+    origin: configService.get('FRONTEND_BASE_URL'),
+  });
   app.setGlobalPrefix('api');
 
   await app.listen(configService.get('APP_PORT'));

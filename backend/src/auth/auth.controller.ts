@@ -1,8 +1,18 @@
-import { Body, Controller, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignupDto } from './dto/signup.dto';
 import { SigninDto } from './dto/signin.dto';
-import { Response } from 'express';
+import { Request, Response } from 'express';
+import { AccessTokenGuard } from 'src/common/guards/access-token.guard';
+import { JwtPayload } from 'src/common/types/jwt-payload.type';
 
 @Controller('auth')
 export class AuthController {
@@ -24,5 +34,12 @@ export class AuthController {
   ) {
     const { accessToken } = await this.authService.signup(dto);
     response.cookie('accessToken', accessToken);
+  }
+
+  @Get('/profile')
+  @UseGuards(AccessTokenGuard)
+  async getProfile(@Req() request: Request) {
+    const payload = request.user as JwtPayload;
+    return this.authService.getProfile(payload.sub);
   }
 }
