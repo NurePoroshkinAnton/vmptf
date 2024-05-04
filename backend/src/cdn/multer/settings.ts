@@ -31,7 +31,10 @@ export const multerSettings = {
     },
     filename: (_, file, cb) => {
       const uuid = crypto.randomUUID();
-      cb(null, `${uuid}-${file.originalname}`);
+      cb(
+        null,
+        `${uuid}${configService.get('UPLOAD_ID_SEPARATOR')}${file.originalname}`,
+      );
     },
   }),
 };

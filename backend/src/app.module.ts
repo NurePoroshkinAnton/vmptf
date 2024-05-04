@@ -5,6 +5,7 @@ import { AuthModule } from './auth/auth.module';
 import { CdnModule } from './cdn/cdn.module';
 import { datasourceOptions } from './database/datasource-options';
 import { VideosModule } from './videos/videos.module';
+import { CommentsModule } from './comments/comments.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { VideosModule } from './videos/videos.module';
     JwtModule.register({ global: true }),
     VideosModule,
     CdnModule,
+    CommentsModule,
   ],
 })
 export class AppModule {}

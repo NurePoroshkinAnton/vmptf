@@ -8,6 +8,7 @@ import {
   Req,
   Res,
   StreamableFile,
+  UploadedFile,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { CdnService } from './cdn.service';
 import { Request, Response } from 'express';
 import { AccessTokenGuard } from 'src/common/guards/access-token.guard';
 import { JwtPayload } from 'src/common/types/jwt-payload.type';
+import { configService } from 'src/utlis/ConfigService';
 
 @Controller('cdn')
 @UseGuards(AccessTokenGuard)
@@ -25,7 +27,17 @@ export class CdnController {
   @Post('/upload')
   @HttpCode(200)
   @UseInterceptors(FileInterceptor('file'))
-  upload() {}
+  upload(@UploadedFile() file: Express.Multer.File) {
+    const name = file.filename;
+    const idSeparatorIndex = name.indexOf(
+      configService.get('UPLOAD_ID_SEPARATOR'),
+    );
+    const id = name.slice(0, idSeparatorIndex);
+
+    return {
+      id,
+    };
+  }
 
   @Get(':id')
   async getById(

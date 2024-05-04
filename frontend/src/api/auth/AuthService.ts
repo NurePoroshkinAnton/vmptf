@@ -5,7 +5,7 @@ import axios from "axios"
 
 export class AuthService {
     private static axiosInstance = axios.create({
-        baseURL: `${import.meta.env.VITE_API_BASE_URL}/api/auth`,
+        baseURL: `${import.meta.env.VITE_API_BASE_URL}/auth`,
         withCredentials: true,
     })
 

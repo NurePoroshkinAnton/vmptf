@@ -18,22 +18,22 @@ export class CdnService {
   async remove(id: string, userId: string) {
     const userDir = this.getUserDir(userId);
     const fileName = await this.getFileById(id, userDir);
-    fs.promises.unlink(path.join(userDir, fileName));
+    await fs.promises.unlink(path.join(userDir, fileName));
   }
 
   private async getFileById(id: string, directory: string) {
     try {
-      await fs.promises.access(directory);
-    } catch {
-      throw new NotFoundException('Requested file does not exist');
-    }
+      const files = await fs.promises.readdir(directory);
 
-    const files = await fs.promises.readdir(directory);
-
-    for (const fileName of files) {
-      if (fileName.startsWith(id + '-')) {
-        return fileName;
+      for (const fileName of files) {
+        if (
+          fileName.startsWith(id + configService.get('UPLOAD_ID_SEPARATOR'))
+        ) {
+          return fileName;
+        }
       }
+    } catch (error) {
+      throw new NotFoundException('Requested file does not exist');
     }
 
     throw new NotFoundException('Requested file does not exist');
