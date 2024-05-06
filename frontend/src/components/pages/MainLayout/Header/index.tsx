@@ -1,14 +1,15 @@
+import { authStore } from "@/store/auth"
 import {
     LogoutOutlined,
     UserOutlined,
     VideoCameraAddOutlined,
 } from "@ant-design/icons"
 import { Avatar, Button, Layout, Tooltip } from "antd"
-import styles from "./styles.module.scss"
 import { observer } from "mobx-react-lite"
-import { authStore } from "@/store/auth"
-import { UploadVideoModal } from "../../Home/UploadVideoModal"
 import { useState } from "react"
+import { Link } from "react-router-dom"
+import { UploadVideoModal } from "../../Home/UploadVideoModal"
+import styles from "./styles.module.scss"
 
 function HeaderComponent() {
     const [isModalOpen, setModalOpen] = useState<boolean>(false)
@@ -17,7 +18,9 @@ function HeaderComponent() {
     return (
         <Layout.Header className={styles["header"]}>
             <UploadVideoModal isOpen={isModalOpen} setOpen={setModalOpen} />
-            <div className={styles["logo"]}>MyTube</div>
+            <Link to={"/"} className={styles["logo"]}>
+                PixelsTube
+            </Link>
             <Tooltip title="Add a new video">
                 <Button
                     shape="circle"
