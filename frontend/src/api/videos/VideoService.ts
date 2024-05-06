@@ -23,6 +23,8 @@ export class VideoService {
     }
 
     static async getById(id: string) {
+        await new Promise<void>((resolve) => setTimeout(() => resolve(), 2000))
+
         const resp = await this.axiosInstance.get<Video>(`/${id}`)
         return resp.data
     }

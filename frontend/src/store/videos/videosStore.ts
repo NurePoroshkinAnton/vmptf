@@ -15,6 +15,8 @@ class VideoStore {
     async fetchVideos() {
         this.isLoading = true
 
+        await new Promise<void>((resolve) => setTimeout(() => resolve(), 3000))
+
         try {
             const videos = await VideoService.getAll()
             runInAction(() => {

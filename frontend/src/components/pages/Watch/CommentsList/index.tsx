@@ -4,6 +4,8 @@ import { commentsStore } from "@/store/comments"
 import styles from "./styles.module.scss"
 import AddCommnet from "../AddComment"
 import { ReactNode } from "react"
+import { Spin } from "antd"
+import { LoadingOutlined } from "@ant-design/icons"
 
 function CommentsListComponent() {
     const comments = commentsStore.comments
@@ -30,6 +32,16 @@ function CommentsListComponent() {
             <div className={styles["count"]}>{comments.length} Comments</div>
             <AddCommnet videoId={commentsStore.videoId!} />
             {commentsRender}
+            <Spin
+                style={{ width: "100%" }}
+                spinning={isLoading}
+                indicator={
+                    <LoadingOutlined
+                        style={{ fontSize: 24 }}
+                        spin={isLoading}
+                    />
+                }
+            />
         </div>
     )
 }

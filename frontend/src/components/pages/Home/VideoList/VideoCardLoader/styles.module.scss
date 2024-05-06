@@ -1,0 +1,14 @@
+.loader-video {
+    width: 100% !important;
+    height: 300px !important;
+    aspect-ratio: 1.77 !important;
+    border-radius: 14px !important;
+    margin-bottom: 8px;
+
+    :global {
+        .anticon {
+            display: none;
+        }
+    }
+}
+
