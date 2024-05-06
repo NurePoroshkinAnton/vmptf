@@ -13,15 +13,28 @@ export class CommentsService {
   ) {}
 
   async getAll(): Promise<Comment[]> {
-    return this.commentRepo.find();
+    return this.commentRepo.find({
+      relations: {
+        video: true,
+        user: true,
+      },
+    });
   }
 
   async getById(id: string): Promise<Comment> {
-    return this.commentRepo.findOneBy({ id });
+    return this.commentRepo.findOne({
+      where: {
+        id,
+      },
+      relations: {
+        video: true,
+        user: true,
+      },
+    });
   }
 
-  async create(dto: CreateCommentDto): Promise<Comment> {
-    const comment = this.commentRepo.create(dto);
+  async create(dto: CreateCommentDto, userId: string): Promise<Comment> {
+    const comment = this.commentRepo.create({ ...dto, userId });
     return this.commentRepo.save(comment);
   }
 

@@ -1,6 +1,7 @@
 .video-block {
     flex-direction: column;
-    height: auto;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
 }
 
 .video {
@@ -8,7 +9,6 @@
     height: 680px;
     border-radius: 14px;
     background-color: #d5cece;
-    margin-bottom: 20px;
 }
 
 .title {

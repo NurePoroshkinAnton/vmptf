@@ -1,10 +1,11 @@
 import { NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { JwtPayload, jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { diskStorage } from 'multer';
 import * as crypto from 'node:crypto';
 import * as fs from 'node:fs';
 import * as path from 'path';
 import { configService } from 'src/utlis/ConfigService';
+import { JwtPayload } from 'jwt-decode';
 
 export const multerSettings = {
   storage: diskStorage({
@@ -18,13 +19,14 @@ export const multerSettings = {
       const payload = jwtDecode<JwtPayload>(accessToken);
       const destination = path.join(
         process.cwd(),
-        `${configService.get('UPLOADS_DIR')}/${payload.sub}`,
+        `${configService.get('UPLOADS_DIR')}`,
+        payload.sub,
       );
 
       try {
-        await fs.promises.access(destination);
-      } catch {
-        throw new NotFoundException('Requested file does not exist');
+        await fs.promises.mkdir(destination, { recursive: true });
+      } catch (error) {
+        cb(error, null);
       }
 
       cb(null, destination);

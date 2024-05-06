@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
                         ),
                     },
                     {
-                        path: "/watch",
+                        path: "/watch/:id",
                         element: (
                             <ProtectedRoute>
                                 <WatchPage />

@@ -4,6 +4,7 @@ import { UpdateVideoDto } from './dto/update-video.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Video } from './entities/video.entity';
 import { Repository } from 'typeorm';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class VideosService {
@@ -13,15 +14,24 @@ export class VideosService {
   ) {}
 
   async getAll(): Promise<Video[]> {
-    return this.videoRepo.find();
+    return this.videoRepo.find({
+      relations: {
+        user: true,
+      },
+    });
   }
 
   async getById(id: string): Promise<Video> {
-    return this.videoRepo.findOneBy({ id });
+    return this.videoRepo.findOne({
+      where: { id },
+      relations: {
+        user: true,
+      },
+    });
   }
 
-  async create(dto: CreateVideoDto): Promise<Video> {
-    const video = this.videoRepo.create(dto);
+  async create(dto: CreateVideoDto, userId: string): Promise<Video> {
+    const video = this.videoRepo.create({ ...dto, userId });
     return this.videoRepo.save(video);
   }
 
