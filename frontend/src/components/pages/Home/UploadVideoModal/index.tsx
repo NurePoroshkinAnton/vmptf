@@ -5,6 +5,7 @@ import { UploadChangeParam, UploadFile } from "antd/es/upload"
 import { CdnService } from "@/api/cdn/CdnService"
 import { UploadVideoDto } from "@/types/models/videos/dto/UploadVideoDto"
 import { VideoService } from "@/api/videos/VideoService"
+import { videoStore } from "@/store/videos"
 
 interface UploadVideoModalProps {
     isOpen: boolean
@@ -22,6 +23,9 @@ interface UploadFormValues {
 export function UploadVideoModal({ isOpen, setOpen }: UploadVideoModalProps) {
     const [fileId, setFileId] = useState<string | null>(null)
     const [previewId, setPreviewId] = useState<string | null>(null)
+    const [fileUpload, setFileUpload] = useState<UploadFile[]>([])
+    const [previewUpload, setPreviewUpload] = useState<UploadFile[]>([])
+    const [form] = Form.useForm()
 
     function beforeUpload(state: string | null) {
         if (state) {
@@ -32,7 +36,8 @@ export function UploadVideoModal({ isOpen, setOpen }: UploadVideoModalProps) {
 
     async function handleUploadSuccess(
         args: UploadChangeParam<UploadFile<UploadFileResponse>>,
-        setState: (value: string | null) => void
+        setState: (value: string | null) => void,
+        setFile: (value: UploadFile[]) => void
     ) {
         const { file } = args
 
@@ -40,6 +45,8 @@ export function UploadVideoModal({ isOpen, setOpen }: UploadVideoModalProps) {
             const id = file.response.id
             setState(id)
         }
+
+        setFile([file])
     }
 
     async function removeUpload(
@@ -59,6 +66,11 @@ export function UploadVideoModal({ isOpen, setOpen }: UploadVideoModalProps) {
         }
     }
 
+    function clearUploads() {
+        setFileUpload([])
+        setPreviewUpload([])
+    }
+
     async function handleSubmit(values: UploadFormValues) {
         if (!fileId || !previewId) {
             return
@@ -70,6 +82,9 @@ export function UploadVideoModal({ isOpen, setOpen }: UploadVideoModalProps) {
             setFileId(null)
             setPreviewId(null)
             setOpen(false)
+            videoStore.invalidate()
+            form.setFieldsValue({ title: "" })
+            clearUploads()
         } catch (error) {
             message.error("An error occured while uploading video")
         }
@@ -82,7 +97,7 @@ export function UploadVideoModal({ isOpen, setOpen }: UploadVideoModalProps) {
             onCancel={() => setOpen(false)}
             title="Upload a new video"
         >
-            <Form layout="vertical" onFinish={handleSubmit}>
+            <Form layout="vertical" onFinish={handleSubmit} form={form}>
                 <Form.Item name="title" label="Title" required>
                     <Input />
                 </Form.Item>
@@ -95,11 +110,13 @@ export function UploadVideoModal({ isOpen, setOpen }: UploadVideoModalProps) {
                         }/cdn/upload`}
                         withCredentials
                         onChange={(args) =>
-                            handleUploadSuccess(args, setFileId)
+                            handleUploadSuccess(args, setFileId, setFileUpload)
                         }
                         onRemove={() => removeUpload(fileId, setFileId)}
                         maxCount={1}
                         beforeUpload={() => beforeUpload(fileId)}
+                        fileList={fileUpload}
+                        accept="video/*"
                     />
                 </div>
                 <div className={styles["form-item"]}>
@@ -111,11 +128,17 @@ export function UploadVideoModal({ isOpen, setOpen }: UploadVideoModalProps) {
                         }/cdn/upload`}
                         withCredentials
                         onChange={(args) =>
-                            handleUploadSuccess(args, setPreviewId)
+                            handleUploadSuccess(
+                                args,
+                                setPreviewId,
+                                setPreviewUpload
+                            )
                         }
                         onRemove={() => removeUpload(previewId, setPreviewId)}
                         maxCount={1}
                         beforeUpload={() => beforeUpload(previewId)}
+                        accept="image/*"
+                        fileList={previewUpload}
                     />
                 </div>
                 <Form.Item>

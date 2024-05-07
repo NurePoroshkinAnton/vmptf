@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -15,6 +16,7 @@ import { VideosService } from './videos.service';
 import { AccessTokenGuard } from 'src/common/guards/access-token.guard';
 import { Request } from 'express';
 import { JwtPayload } from 'src/common/types/jwt-payload.type';
+import { GetAllPaginatedDto } from 'src/common/types/get-all-paginated.dto';
 
 @Controller('videos')
 @UseGuards(AccessTokenGuard)
@@ -28,8 +30,9 @@ export class VideosController {
   }
 
   @Get()
-  getAll() {
-    return this.videosService.getAll();
+  getAll(@Query() query: GetAllPaginatedDto) {
+    const { page, perPage } = query;
+    return this.videosService.getAll(page, perPage);
   }
 
   @Get(':id')

@@ -1,6 +1,7 @@
 import { Comment } from "@/types/models/comments/Comment"
 import { CreateCommentDto } from "@/types/models/comments/dto/CreateCommentDto"
 import { UpdateCommentDto } from "@/types/models/comments/dto/UpdateCommentDto"
+import { timeout } from "@/utils/timeout"
 import axios from "axios"
 
 export class CommentsService {
@@ -14,6 +15,8 @@ export class CommentsService {
     }
 
     static async getAll(videoId: string) {
+        await timeout(2000)
+
         const resp = await this.axiosInstance.get<Comment[]>("", {
             params: {
                 videoId,

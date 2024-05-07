@@ -6,7 +6,6 @@ import Signup from "@/components/pages/auth/Signup"
 import MainLayout from "@/components/pages/MainLayout"
 import HomePage from "@/components/pages/Home"
 import WatchPage from "@/components/pages/Watch"
-import UploadPage from "@/components/pages/Upload"
 import ProtectedRoute from "@/components/hoc/ProtectedRoute"
 
 export const router = createBrowserRouter([
@@ -30,14 +29,6 @@ export const router = createBrowserRouter([
                         element: (
                             <ProtectedRoute>
                                 <WatchPage />
-                            </ProtectedRoute>
-                        ),
-                    },
-                    {
-                        path: "/upload",
-                        element: (
-                            <ProtectedRoute>
-                                <UploadPage />
                             </ProtectedRoute>
                         ),
                     },

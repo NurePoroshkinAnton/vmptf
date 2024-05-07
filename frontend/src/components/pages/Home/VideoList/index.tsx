@@ -5,6 +5,7 @@ import { videoStore } from "@/store/videos"
 import { Empty } from "antd"
 import { useEffect } from "react"
 import VideoCardLoader from "./VideoCardLoader"
+import Intersector from "@/components/utils/Intersector"
 
 function VideoListComponent() {
     const videos = videoStore.videos
@@ -12,7 +13,10 @@ function VideoListComponent() {
 
     useEffect(() => {
         if (videos.length === 0) {
-            videoStore.fetchVideos()
+            videoStore.fetchVideos({
+                page: videoStore.page,
+                perPage: videoStore.perPage,
+            })
         }
     }, [])
 
@@ -30,6 +34,14 @@ function VideoListComponent() {
                 <VideoCard video={video} key={video.id} />
             ))}
             {isLoading && loaders}
+            <Intersector
+                callback={() =>
+                    videoStore.fetchVideos({
+                        page: videoStore.page + 1,
+                        perPage: videoStore.perPage,
+                    })
+                }
+            />
         </div>
     )
 }

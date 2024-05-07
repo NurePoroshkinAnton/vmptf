@@ -23,7 +23,8 @@
 .preview {
     border-radius: 14px;
     max-height: 300px;
-    object-fit: cover;
+    object-fit: contain;
     margin-bottom: 8px;
+    background-color: #c2c2c2;
 }
 

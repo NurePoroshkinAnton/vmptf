@@ -1,5 +1,8 @@
+import { GetAllPaginatedDto } from "@/types/common/GetAllPaginatedDto"
+import { PaginationRepsonse } from "@/types/common/PaginationResponse"
 import { Video } from "@/types/models/videos/Video"
 import { UploadVideoDto } from "@/types/models/videos/dto/UploadVideoDto"
+import { timeout } from "@/utils/timeout"
 import axios from "axios"
 import dayjs from "dayjs"
 
@@ -13,17 +16,33 @@ export class VideoService {
         await this.axiosInstance.post("", dto)
     }
 
-    static async getAll() {
-        const resp = await this.axiosInstance.get<Video[]>("")
-        const videos = resp.data.map((video) => ({
+    static async getAll({ page, perPage }: GetAllPaginatedDto) {
+        await timeout(2000)
+
+        const resp = await this.axiosInstance.get<PaginationRepsonse<Video>>(
+            "",
+            {
+                params: {
+                    page,
+                    perPage,
+                },
+            }
+        )
+        const { items, total } = resp.data
+
+        const videos = items.map((video) => ({
             ...video,
             createdAt: dayjs(video.createdAt),
         }))
-        return videos
+
+        return {
+            items: videos,
+            total,
+        }
     }
 
     static async getById(id: string) {
-        await new Promise<void>((resolve) => setTimeout(() => resolve(), 2000))
+        await timeout(2000)
 
         const resp = await this.axiosInstance.get<Video>(`/${id}`)
         return resp.data

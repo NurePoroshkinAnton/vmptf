@@ -5,6 +5,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Video } from './entities/video.entity';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
+import { toTakeSkip } from 'src/utlis/toTakeSkip';
+import { PaginationResponse } from 'src/common/types/pagenation-repsonse.type';
 
 @Injectable()
 export class VideosService {
@@ -13,12 +15,29 @@ export class VideosService {
     private readonly videoRepo: Repository<Video>,
   ) {}
 
-  async getAll(): Promise<Video[]> {
-    return this.videoRepo.find({
+  async getAll(
+    page: number,
+    perPage: number,
+  ): Promise<PaginationResponse<Video>> {
+    const { take, skip } = toTakeSkip(page, perPage);
+
+    const videos = await this.videoRepo.find({
       relations: {
         user: true,
       },
+      take,
+      skip,
+      order: {
+        createdAt: 'DESC',
+      },
     });
+
+    const total = await this.videoRepo.count();
+
+    return {
+      total,
+      items: videos,
+    };
   }
 
   async getById(id: string): Promise<Video> {
