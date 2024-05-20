@@ -1,5 +1,7 @@
+import { PaginationRepsonse } from "@/types/common/PaginationResponse"
 import { Comment } from "@/types/models/comments/Comment"
 import { CreateCommentDto } from "@/types/models/comments/dto/CreateCommentDto"
+import { GetAllVideosDto } from "@/types/models/comments/dto/GetAllCommentsDto"
 import { UpdateCommentDto } from "@/types/models/comments/dto/UpdateCommentDto"
 import { timeout } from "@/utils/timeout"
 import axios from "axios"
@@ -14,14 +16,19 @@ export class CommentsService {
         await this.axiosInstance.post("", dto)
     }
 
-    static async getAll(videoId: string) {
+    static async getAll({ videoId, page, perPage }: GetAllVideosDto) {
         await timeout(2000)
 
-        const resp = await this.axiosInstance.get<Comment[]>("", {
-            params: {
-                videoId,
-            },
-        })
+        const resp = await this.axiosInstance.get<PaginationRepsonse<Comment>>(
+            "",
+            {
+                params: {
+                    page,
+                    perPage,
+                    videoId,
+                },
+            }
+        )
 
         return resp.data
     }

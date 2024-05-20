@@ -8,13 +8,15 @@ import {
   Delete,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { AccessTokenGuard } from 'src/common/guards/access-token.guard';
-import { Request } from 'express';
+import { Request, query } from 'express';
 import { JwtPayload } from 'src/common/types/jwt-payload.type';
+import { GetAllVideosDto } from './dto/get-all-videos.dto';
 
 @Controller('comments')
 @UseGuards(AccessTokenGuard)
@@ -28,8 +30,9 @@ export class CommentsController {
   }
 
   @Get()
-  async getAll() {
-    return this.commentsService.getAll();
+  async getAll(@Query() query: GetAllVideosDto) {
+    const { page, perPage, videoId } = query;
+    return this.commentsService.getAll(videoId, page, perPage);
   }
 
   @Get(':id')

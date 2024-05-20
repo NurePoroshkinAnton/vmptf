@@ -33,6 +33,7 @@ export default function AddCommnet({ videoId }: AddCommentProps) {
         try {
             setLoading(true)
             await CommentsService.create({ text: comment, videoId })
+            setComment("")
             commentsStore.invalidate()
         } catch (error) {
             message.error(
@@ -71,7 +72,7 @@ export default function AddCommnet({ videoId }: AddCommentProps) {
                         icon={<CheckOutlined />}
                         shape="circle"
                         onClick={addComment}
-                        loading={isLoading}
+                        loading={isLoading || commentsStore.isLoading}
                     />
                     <Button
                         icon={<CloseOutlined />}

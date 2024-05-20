@@ -4,6 +4,8 @@ import { Repository } from 'typeorm';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { Comment } from './entities/comment.entity';
+import { toTakeSkip } from 'src/utlis/toTakeSkip';
+import { PaginationResponse } from 'src/common/types/pagenation-repsonse.type';
 
 @Injectable()
 export class CommentsService {
@@ -12,13 +14,34 @@ export class CommentsService {
     private readonly commentRepo: Repository<Comment>,
   ) {}
 
-  async getAll(): Promise<Comment[]> {
-    return this.commentRepo.find({
+  async getAll(
+    videoId: string,
+    page: number,
+    perPage: number,
+  ): Promise<PaginationResponse<Comment>> {
+    const { take, skip } = toTakeSkip(page, perPage);
+
+    const comments = await this.commentRepo.find({
       relations: {
         video: true,
         user: true,
       },
+      where: {
+        videoId,
+      },
+      take,
+      skip,
+      order: {
+        createdAt: 'DESC',
+      },
     });
+
+    const total = await this.commentRepo.count({ where: { videoId } });
+
+    return {
+      items: comments,
+      total,
+    };
   }
 
   async getById(id: string): Promise<Comment> {

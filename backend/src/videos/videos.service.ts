@@ -4,7 +4,6 @@ import { UpdateVideoDto } from './dto/update-video.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Video } from './entities/video.entity';
 import { Repository } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
 import { toTakeSkip } from 'src/utlis/toTakeSkip';
 import { PaginationResponse } from 'src/common/types/pagenation-repsonse.type';
 

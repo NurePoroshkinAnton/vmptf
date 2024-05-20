@@ -8,15 +8,19 @@ import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
 import CommentsList from "./CommentsList"
 import styles from "./styles.module.scss"
+import { observer } from "mobx-react-lite"
 
 type RouteParams = {
     id: string
 }
 
-export default function WatchPage() {
+function WatchPageComponent() {
     const [video, setVideo] = useState<Video | null>(null)
     const [loading, setLoading] = useState<boolean>(false)
     const { id } = useParams<RouteParams>()
+
+    console.log(id)
+    console.log(commentsStore.videoId)
 
     useEffect(() => {
         if (!id) {
@@ -43,6 +47,8 @@ export default function WatchPage() {
         if (!id) {
             return
         }
+
+        console.log("set id")
 
         commentsStore.setVideoId(id)
     }, [id])
@@ -81,4 +87,7 @@ export default function WatchPage() {
         </div>
     )
 }
+
+const WatchPage = observer(WatchPageComponent)
+export default WatchPage
 

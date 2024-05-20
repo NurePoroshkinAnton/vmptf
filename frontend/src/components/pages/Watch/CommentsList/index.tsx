@@ -6,14 +6,11 @@ import AddCommnet from "../AddComment"
 import { ReactNode } from "react"
 import { Spin } from "antd"
 import { LoadingOutlined } from "@ant-design/icons"
+import Intersector from "@/components/utils/Intersector"
 
 function CommentsListComponent() {
     const comments = commentsStore.comments
     const isLoading = commentsStore.isLoading
-
-    if (isLoading) {
-        return <div>Loading...</div>
-    }
 
     let commentsRender: ReactNode = (
         <div className={styles["no-comments"]}>
@@ -29,9 +26,12 @@ function CommentsListComponent() {
 
     return (
         <div className={styles["comments-list-wrapper"]}>
-            <div className={styles["count"]}>{comments.length} Comments</div>
+            <div className={styles["count"]}>
+                {Math.max(0, commentsStore.total)} Comment
+                {commentsStore.total === 1 ? "" : "s"}
+            </div>
             <AddCommnet videoId={commentsStore.videoId!} />
-            {commentsRender}
+            <div className={styles["list-wrapper"]}>{commentsRender}</div>
             <Spin
                 style={{ width: "100%" }}
                 spinning={isLoading}
@@ -41,6 +41,21 @@ function CommentsListComponent() {
                         spin={isLoading}
                     />
                 }
+            />
+            <Intersector
+                callback={async () => {
+                    console.log("Intersector")
+
+                    if (!commentsStore.videoId) {
+                        return
+                    }
+
+                    commentsStore.fetchComments({
+                        page: commentsStore.page + 1,
+                        perPage: commentsStore.perPage,
+                        videoId: commentsStore.videoId,
+                    })
+                }}
             />
         </div>
     )
