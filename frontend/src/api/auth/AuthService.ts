@@ -17,6 +17,10 @@ export class AuthService {
         await this.axiosInstance.post("signup", dto)
     }
 
+    static async signout(): Promise<void> {
+        await this.axiosInstance.post("signout")
+    }
+
     static async getProfile(): Promise<User> {
         const resp = await this.axiosInstance.get<User>("profile")
         return resp.data

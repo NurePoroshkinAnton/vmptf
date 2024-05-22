@@ -41,6 +41,13 @@ export class AuthController {
     });
   }
 
+  @Post('/signout')
+  async signout(@Res({ passthrough: true }) response: Response) {
+    response.clearCookie('accessToken', {
+      maxAge: configService.get('ACCESS_TOKENT_EXPIRATION_TIME'),
+    });
+  }
+
   @Get('/profile')
   @UseGuards(AccessTokenGuard)
   async getProfile(@Req() request: Request) {

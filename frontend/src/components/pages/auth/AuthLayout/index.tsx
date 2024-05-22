@@ -7,7 +7,7 @@ export default function AuthLayout() {
     return (
         <div className={styles["auth-layout"]}>
             <div className={styles["content-wrapper"]}>
-                <Typography.Title>Welcome to MyTube!</Typography.Title>
+                <Typography.Title>Welcome to PixelsTube!</Typography.Title>
                 <Outlet />
             </div>
             <div className={styles["auth-banner-wrapper"]}>

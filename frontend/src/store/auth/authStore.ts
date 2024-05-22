@@ -76,7 +76,8 @@ class AuthStore {
         }
     }
 
-    signout() {
+    async signout() {
+        await AuthService.signout()
         this.user = null
     }
 }
