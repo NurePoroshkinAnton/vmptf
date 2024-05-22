@@ -5,6 +5,7 @@ import {
   HttpCode,
   Param,
   Post,
+  Query,
   Req,
   Res,
   StreamableFile,
@@ -42,11 +43,10 @@ export class CdnController {
   @Get(':id')
   async getById(
     @Param('id') id: string,
-    @Req() request: Request,
+    @Query('userId') userId: string,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const user = request.user as JwtPayload;
-    const { stream, name } = await this.cdnService.getById(id, user.sub);
+    const { stream, name } = await this.cdnService.getById(id, userId);
 
     response.setHeader('Content-Disposition', `attachment; filename=${name}`);
     return new StreamableFile(stream);

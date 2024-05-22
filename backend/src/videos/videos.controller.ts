@@ -46,7 +46,8 @@ export class VideosController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.videosService.remove(id);
+  remove(@Param('id') id: string, @Req() request: Request) {
+    const userId = (request.user as JwtPayload).sub;
+    return this.videosService.remove(id, userId);
   }
 }

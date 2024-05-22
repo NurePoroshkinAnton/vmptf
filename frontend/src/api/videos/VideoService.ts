@@ -47,5 +47,11 @@ export class VideoService {
         const resp = await this.axiosInstance.get<Video>(`/${id}`)
         return resp.data
     }
+
+    static async remove(id: string) {
+        await timeout(2000)
+
+        await this.axiosInstance.delete<void>(`/${id}`)
+    }
 }
 

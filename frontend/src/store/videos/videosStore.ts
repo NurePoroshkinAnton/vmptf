@@ -16,6 +16,7 @@ class VideoStore {
     page: number = 1
     perPage: number = VIDEOS_PER_PAGE
     total: number = -1
+    isDeletingVideo = false
 
     get hasMore() {
         return !(this.total !== -1 && this.videos.length === this.total)
@@ -50,6 +51,19 @@ class VideoStore {
             runInAction(() => {
                 this.isLoading = false
             })
+        }
+    }
+
+    async removeVideo(id: string) {
+        this.isDeletingVideo = true
+
+        try {
+            await VideoService.remove(id)
+            this.invalidate()
+        } catch (error) {
+            message.error("An error occured while deleting a video")
+        } finally {
+            runInAction(() => (this.isDeletingVideo = false))
         }
     }
 

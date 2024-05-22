@@ -8,5 +8,6 @@ import { multerSettings } from './multer/settings';
   imports: [MulterModule.register(multerSettings)],
   controllers: [CdnController],
   providers: [CdnService],
+  exports: [CdnService],
 })
 export class CdnModule {}

@@ -2,25 +2,28 @@ import { VideoService } from "@/api/videos/VideoService"
 import { commentsStore } from "@/store/comments"
 import { Video } from "@/types/models/videos/Video"
 import { getUploadSrc } from "@/utils/getUploadSrc"
-import { CloudOutlined } from "@ant-design/icons"
+import { CloudOutlined, DeleteOutlined } from "@ant-design/icons"
 import { Button, Divider, Spin, message } from "antd"
 import { useEffect, useState } from "react"
-import { useParams } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import CommentsList from "./CommentsList"
 import styles from "./styles.module.scss"
 import { observer } from "mobx-react-lite"
+import { authStore } from "@/store/auth"
+import { videoStore } from "@/store/videos"
 
 type RouteParams = {
     id: string
 }
 
 function WatchPageComponent() {
+    const user = authStore.user!
     const [video, setVideo] = useState<Video | null>(null)
     const [loading, setLoading] = useState<boolean>(false)
     const { id } = useParams<RouteParams>()
+    const navigate = useNavigate()
 
-    console.log(id)
-    console.log(commentsStore.videoId)
+    console.log(user.id)
 
     useEffect(() => {
         if (!id) {
@@ -62,6 +65,15 @@ function WatchPageComponent() {
         message.success("Link copied to the clipboard")
     }
 
+    async function handleRemoveClick() {
+        if (!video) {
+            return
+        }
+
+        await videoStore.removeVideo(video.id)
+        navigate("/")
+    }
+
     return (
         <div className={styles["video-block"]}>
             <video
@@ -74,6 +86,16 @@ function WatchPageComponent() {
                 <div className={styles["views-count"]}>
                     Uploaded by <b>{video.user.nickname}</b>
                 </div>
+                {video.user.id === user.id && (
+                    <Button
+                        shape="round"
+                        icon={<DeleteOutlined />}
+                        onClick={handleRemoveClick}
+                        loading={videoStore.isDeletingVideo}
+                    >
+                        Remove
+                    </Button>
+                )}
                 <Button
                     shape="round"
                     icon={<CloudOutlined />}

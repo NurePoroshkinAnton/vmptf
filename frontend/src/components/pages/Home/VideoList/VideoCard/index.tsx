@@ -4,6 +4,7 @@ import { getUploadSrc } from "@/utils/getUploadSrc"
 import { observer } from "mobx-react-lite"
 import { useNavigate } from "react-router-dom"
 import { getCreatedAtCaption } from "@/utils/getCreatedAtCaption"
+import { videoStore } from "@/store/videos"
 
 interface VideoCardProps {
     video: Video
@@ -11,12 +12,15 @@ interface VideoCardProps {
 
 function VideoCardComponent({ video }: VideoCardProps) {
     const navigate = useNavigate()
+    const isLoading = videoStore.isLoading
 
     const createdAtCaption = getCreatedAtCaption(video.createdAt)
 
     return (
         <div
-            className={styles["card-wrapper"]}
+            className={`${styles["card-wrapper"]} ${
+                isLoading ? styles["card-wrapper--loading"] : ""
+            }`}
             onClick={() => navigate(`/watch/${video.id}`)}
         >
             <img

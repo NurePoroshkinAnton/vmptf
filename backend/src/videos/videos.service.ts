@@ -6,12 +6,14 @@ import { Video } from './entities/video.entity';
 import { Repository } from 'typeorm';
 import { toTakeSkip } from 'src/utlis/toTakeSkip';
 import { PaginationResponse } from 'src/common/types/pagenation-repsonse.type';
+import { CdnService } from 'src/cdn/cdn.service';
 
 @Injectable()
 export class VideosService {
   constructor(
     @InjectRepository(Video)
     private readonly videoRepo: Repository<Video>,
+    private readonly cdnService: CdnService,
   ) {}
 
   async getAll(
@@ -58,7 +60,11 @@ export class VideosService {
     return this.getById(id);
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string, userId: string): Promise<void> {
+    const { fileId, previewId } = await this.getById(id);
+
     await this.videoRepo.delete(id);
+    await this.cdnService.remove(fileId, userId);
+    await this.cdnService.remove(previewId, userId);
   }
 }
